@@ -1,4 +1,6 @@
 import React from 'react';
+
+import MainNavigation from './shared/components/Navigation/MainNavigation';
 import './App.css';
 import {BrowserRouter as Router,Route,Redirect,Switch} from 'react-router-dom'
 import User from './user/pages/User';
@@ -6,12 +8,15 @@ import User from './user/pages/User';
 function App() {
   return (
  <Router>
+  <MainNavigation/>
+  <main>
 <Switch>
 <Route path="/" exact>
   <User/>
 </Route>
  <Redirect to="/"/>
  </Switch>
+ </main>
 
 </Router>
  

@@ -6,6 +6,7 @@ import './App.css';
 import {BrowserRouter as Router,Route,Redirect,Switch} from 'react-router-dom'
 import User from './user/pages/User';
 import NewPlace from "./places/pages/NewPlace"
+import UpdatePlace from './places/pages/UpdatePlace';
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
 </Route>
 <Route path="/places/new" exact>
   <NewPlace/>
+</Route>
+<Route path="/places/:placeId">
+  <UpdatePlace/>
 </Route>
  <Redirect to="/"/>
  </Switch>

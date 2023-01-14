@@ -5,6 +5,9 @@ import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
 import Card from "../../shared/components/UIelements/Card"
 import { AuthContext } from "../../shared/context/auth-context";
+import ErrorModal from '../../shared/components/UIelements/ErrorModal';
+import LoadingSpinner from "../../shared/components/UIelements/LoadingSpinner";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 
 import "./Auth.css"
 
@@ -13,6 +16,8 @@ const Auth = ()=>{
 
   const auth = useContext(AuthContext)
     const[isLoginMode, setIsLoginMode]=useState(true);
+ const {isLoading, error, sendRequest, clearError}=useHttpClient
+
     const [formState, InputHandler, setFormData]=useForm(
         {
        email:{
@@ -28,12 +33,46 @@ const Auth = ()=>{
     
      );
      
-     const authSubmitHandler = event =>{
+     const authSubmitHandler = async event =>{
         event.preventDefault();
-        console.log(formState.inputs); //send to backend 
-        auth.login();
-      };
+       
+
+        if(isLoginMode){
+          try {
+            await sendRequest('http://localhost:5000/api/users/login','POST',
+            JSON.stringify({
+              email: formState.inputs.email.value,
+              password: formState.inputs.password.value
+            }),
+            {
+              'Content-Type':'application/json'
+            }
+            );
+            auth.login();
+
+          } catch (error) {
+            
+          }
       
+        }
+        else{
+          try {
+            await sendRequest('http://localhost:5000/api/users/signup', 'POST',
+            JSON.stringify({
+              name: formState.inputs.name.value,
+              email: formState.inputs.email.value,
+              password: formState.inputs.password.value
+            }),
+            {
+              'Content-Type':'application/json'
+            },
+            
+          );
+          auth.login();
+           } catch (error) {}
+       
+      };
+    };
      const switchModeHandler = ()=>{
       if(!isLoginMode){
         setFormData({
@@ -54,11 +93,15 @@ const Auth = ()=>{
       setIsLoginMode(prevMode=> !prevMode)
      }   
 
-
+const errorHandler=()=>{
+  // setError(null);
+}
 
 return(
 <>
+<ErrorModal error={error} onClear={clearError}/>
 <Card className="authentication">
+  {isLoading && <LoadingSpinner asOverlay/>}
   <h2>Login Recquired</h2>
   <hr/>
 <form className="place-form" onSubmit={authSubmitHandler}>

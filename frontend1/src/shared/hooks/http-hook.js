@@ -22,6 +22,8 @@ try {
      });
      const responseData = await response.json();
      
+    //  activeHttpRequests.current = activeHttpRequests.current.filter(reqCtrl !== httpAbortCtrl);
+
      if(!response.ok){
        throw new Error(responseData.message);
      }

@@ -93,9 +93,6 @@ const Auth = ()=>{
       setIsLoginMode(prevMode=> !prevMode)
      }   
 
-const errorHandler=()=>{
-  // setError(null);
-}
 
 return(
 <>
